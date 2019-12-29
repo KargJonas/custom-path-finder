@@ -48,13 +48,30 @@ class Grid extends Arr2 {
 
       if (
         this.arr[neighbor.x] !== undefined &&
-        this.arr[neighbor.x][neighbor.y] !== undefined
+        this.arr[neighbor.x][neighbor.y] !== 3
       ) {
         neighbors.push(neighbor);
       }
     });
 
     return neighbors;
+  }
+
+  drawPath(steps) {
+    const absPositions = steps.map(step =>
+      step.mul(this.tileSize).addScalar(this.halfTileSize)
+    );
+
+    ctx.beginPath();
+    ctx.strokeStyle = "green";
+    ctx.lineWidth = 6;
+    ctx.moveTo(absPositions.x, absPositions.y);
+
+    for (let pos of absPositions) {
+      ctx.lineTo(pos.x, pos.y);
+    }
+
+    ctx.stroke();
   }
 
   path(a, b) {
@@ -79,22 +96,5 @@ class Grid extends Arr2 {
 
     step();
     return steps;
-  }
-
-  drawPath(steps) {
-    const absPositions = steps.map(step =>
-      step.mul(this.tileSize).addScalar(this.halfTileSize)
-    );
-
-    ctx.beginPath();
-    ctx.strokeStyle = "green";
-    ctx.lineWidth = 6;
-    ctx.moveTo(absPositions.x, absPositions.y);
-
-    for (let pos of absPositions) {
-      ctx.lineTo(pos.x, pos.y);
-    }
-
-    ctx.stroke();
   }
 }
