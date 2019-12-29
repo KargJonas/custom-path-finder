@@ -4,7 +4,8 @@ class Grid extends Arr2 {
 
   colors = {
     1: "black",
-    2: "green"
+    2: "green",
+    3: "grey"
   };
 
   neighborPositions = [
