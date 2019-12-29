@@ -1,0 +1,51 @@
+const cnv = document.createElement("canvas");
+const ctx = cnv.getContext("2d");
+document.body.appendChild(cnv);
+
+let width, height;
+
+function max() {
+  width = innerWidth;
+  height = innerHeight;
+  cnv.width = width;
+  cnv.height = height;
+}
+
+max();
+addEventListener("resize", max);
+
+function line(a, b) {
+  ctx.moveTo(a.x, a.y);
+  ctx.lineTo(b.x, b.y);
+}
+
+class Arr2 {
+  constructor(columns, rows) {
+    this.columns = columns;
+    this.rows = rows;
+    this.arr = new Array(columns).fill();
+    this.arr = this.arr.map(() => (new Array(rows)).fill(0));
+  }
+
+  map(fn) {
+    for (let x = 0; x < this.columns; x++) {
+      for (let y = 0; y < this.columns; y++) {
+        fn(this.arr[x][y], new Vec2(x, y));
+      }
+    }
+  }
+
+  forEach(fn) {
+    this.map((val, pos) => {
+      this.arr[pos.x][pos.y] = fn(val, pos.x, pos.y);
+    });
+  }
+
+  set(pos, value) {
+    this.arr[pos.x][pos.y] = value;
+  }
+
+  get(pos) {
+    return this.arr[pos.x][pos.y];
+  }
+}
