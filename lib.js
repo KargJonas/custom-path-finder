@@ -29,7 +29,7 @@ class Arr2 {
 
   map(fn) {
     for (let x = 0; x < this.columns; x++) {
-      for (let y = 0; y < this.columns; y++) {
+      for (let y = 0; y < this.rows; y++) {
         fn(this.arr[x][y], new Vec2(x, y));
       }
     }
