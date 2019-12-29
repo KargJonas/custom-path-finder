@@ -29,7 +29,7 @@ class Vec2 {
     const diff = this.sub(other);
 
     return Math.sqrt(
-      Math.pow(diff.x, 2),
+      Math.pow(diff.x, 2) +
       Math.pow(diff.y, 2)
     );
   }

@@ -11,11 +11,11 @@ class Grid extends Arr2 {
     new Vec2(0, -1),
     new Vec2(1, 0),
     new Vec2(0, 1),
-    new Vec2(-1, 0)
-    // new Vec2(-1, -1),
-    // new Vec2(1, 1),
-    // new Vec2(-1, 1),
-    // new Vec2(1, -1),
+    new Vec2(-1, 0),
+    new Vec2(-1, -1),
+    new Vec2(1, 1),
+    new Vec2(-1, 1),
+    new Vec2(1, -1)
   ];
 
   draw() {
@@ -44,8 +44,9 @@ class Grid extends Arr2 {
 
     this.neighborPositions.map(offset => {
       const neighbor = new Vec2(pos.x + offset.x, pos.y + offset.y);
+
       if (
-        this.arr[neighbor.x] &&
+        this.arr[neighbor.x] !== undefined &&
         this.arr[neighbor.x][neighbor.y] !== undefined
       ) {
         neighbors.push(neighbor);
@@ -61,10 +62,17 @@ class Grid extends Arr2 {
     const step = () => {
       const previous = steps[steps.length - 1];
       if (previous.equals(b)) return;
-      const neighbors = this.getNeighbors(previous).sort(
-        (i, j) => b.dist(i) - b.dist(j)
-      );
-      steps.push(neighbors[0]);
+
+      let neighbors = this.getNeighbors(previous).map(neighbor => {
+        return {
+          pos: neighbor,
+          dist: b.dist(neighbor)
+        };
+      });
+
+      neighbors = neighbors.sort((i, j) => i.dist - j.dist);
+
+      steps.push(neighbors[0].pos);
       step();
     };
 
@@ -77,6 +85,7 @@ class Grid extends Arr2 {
       step.mul(this.tileSize).addScalar(this.halfTileSize)
     );
 
+    ctx.beginPath();
     ctx.strokeStyle = "green";
     ctx.lineWidth = 6;
     ctx.moveTo(absPositions.x, absPositions.y);
