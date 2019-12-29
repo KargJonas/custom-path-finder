@@ -74,6 +74,14 @@ class Grid extends Arr2 {
     ctx.stroke();
   }
 
+  pathContains(path, pos) {
+    for (let i = path.length - 1; i >= 0; i--) {
+      if (path[i].equals(pos)) return true;
+    }
+
+    return false;
+  }
+
   path(a, b) {
     const steps = [a];
 
@@ -89,6 +97,14 @@ class Grid extends Arr2 {
       });
 
       neighbors = neighbors.sort((i, j) => i.dist - j.dist);
+
+      while (this.pathContains(steps, neighbors[0].pos)) {
+        neighbors.shift();
+        if (neighbors.length === 0) {
+          console.log("dead end!");
+          return;
+        }
+      }
 
       steps.push(neighbors[0].pos);
       step();

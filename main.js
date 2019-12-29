@@ -13,11 +13,11 @@ function run() {
   grid.drawPath(path);
 }
 
-function mouseDown({ clientX, clientY, which, type }) {
+function mouseDown({ offsetX, offsetY, which, type }) {
   lifted = false;
   const cursorPos = new Vec2(
-    Math.floor(clientX / grid.tileSize),
-    Math.floor(clientY / grid.tileSize)
+    Math.floor(offsetX / grid.tileSize),
+    Math.floor(offsetY / grid.tileSize)
   );
 
   if (lastCursorPos.equals(cursorPos) && type == "mousemove") return;
