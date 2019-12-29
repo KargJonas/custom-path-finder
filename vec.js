@@ -11,6 +11,20 @@ class Vec2 {
     );
   }
 
+  mul(value) {
+    return new Vec2(
+      this.x * value,
+      this.y * value
+    );
+  }
+
+  addScalar(value) {
+    return new Vec2(
+      this.x + value,
+      this.y + value
+    );
+  }
+
   dist(other) {
     const diff = this.sub(other);
 
