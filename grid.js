@@ -13,16 +13,20 @@ class Grid extends Arr2 {
     new Vec2(0, -1),
     new Vec2(1, 0),
     new Vec2(0, 1),
-    new Vec2(-1, 0),
+    new Vec2(-1, 0)
 
-    // Those are for diagonal movement
-    new Vec2(-1, -1),
-    new Vec2(1, 1),
-    new Vec2(-1, 1),
-    new Vec2(1, -1)
+    // // Those are for diagonal movement
+    // new Vec2(-1, -1),
+    // new Vec2(1, 1),
+    // new Vec2(-1, 1),
+    // new Vec2(1, -1)
+
+    // // Just for fun - jump across walls
+    // new Vec2(0, -2),
+    // new Vec2(2, 0),
+    // new Vec2(0, 2),
+    // new Vec2(-2, 0),
   ];
-
-  failedPaths = [];
 
   draw() {
     this.map((value, pos) => {
@@ -90,37 +94,35 @@ class Grid extends Arr2 {
   path(a, b) {
     const steps = [a];
     this.map((val, pos) => (val === 4 ? this.set(pos, 0) : null));
-    this.failedPaths = [];
 
     const step = () => {
       const previous = steps[steps.length - 1];
       if (previous.equals(b)) return;
 
-      let neighbors = this.getNeighbors(previous).map(neighbor => {
-        return {
-          pos: neighbor,
-          dist: b.dist(neighbor)
-        };
-      });
-
-      neighbors = neighbors.sort((i, j) => i.dist - j.dist);
+      let neighbors = this.getNeighbors(previous).map(neighbor => ({
+        pos: neighbor,
+        dist: b.dist(neighbor)
+      }));
 
       if (!neighbors.length) {
-        if (!steps.length) {
-          console.log("dead end!");
+        if (steps.length <= 1) {
+          console.log("dead end");
           return;
         }
 
         steps.shift();
+        step();
         return;
       }
+
+      neighbors = neighbors.sort((i, j) => i.dist - j.dist);
 
       const intersectionIndex = this.pathIndexOf(steps, neighbors[0].pos);
 
       if (intersectionIndex >= 0) {
-        const failedPath = steps.splice(intersectionIndex + 1, steps.length);
-        failedPath.map(pos => this.set(pos, 4));
-        this.failedPaths.push(failedPath);
+        // const failedPath = steps.splice(intersectionIndex + 1, steps.length);
+        // failedPath.map(pos => this.set(pos, 4));
+        this.set(steps.splice(intersectionIndex + 1, steps.length)[0], 4);
       }
 
       steps.push(neighbors[0].pos);

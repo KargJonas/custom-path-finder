@@ -1,6 +1,6 @@
-const grid = new Grid(40, 40);
+const grid = new Grid(50, 50);
 let start = new Vec2(0, 0);
-let end = new Vec2(39, 39);
+let end = new Vec2(49, 49);
 let lastCursorPos = new Vec2();
 let addWalls = true; // false => remove walls
 grid.set(start, 1);
@@ -14,7 +14,6 @@ function run() {
   ctx.clearRect(0, 0, width, height);
   grid.draw();
   grid.drawPath(path);
-  grid.failedPaths.map(failedPath => grid.drawPath(failedPath));
 }
 
 function mouseDown({ offsetX, offsetY, which, type }) {
