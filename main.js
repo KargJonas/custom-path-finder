@@ -1,4 +1,4 @@
-const grid = new Grid(20, 20);
+const grid = new Grid(40, 40);
 let start = new Vec2(0, 0);
 let end = new Vec2(19, 19);
 let lastCursorPos = new Vec2();
@@ -7,10 +7,14 @@ grid.set(start, 1);
 grid.set(end, 1);
 
 function run() {
+  console.time();
   const path = grid.path(start, end);
+  console.timeEnd();
 
+  ctx.clearRect(0, 0, width, height);
   grid.draw();
   grid.drawPath(path);
+  grid.failedPaths.map(failedPath => grid.drawPath(failedPath));
 }
 
 function mouseDown({ offsetX, offsetY, which, type }) {
@@ -35,7 +39,7 @@ function mouseDown({ offsetX, offsetY, which, type }) {
       if (current === 3 && type == "mousedown") addWalls = false;
 
 
-      if (addWalls && current == 0) {
+      if (addWalls && (current == 0 || current == 4)) {
         grid.set(cursorPos, 3);
       }
 
@@ -52,7 +56,6 @@ function mouseDown({ offsetX, offsetY, which, type }) {
       break;
   }
 
-  ctx.clearRect(0, 0, width, height);
   run();
 }
 

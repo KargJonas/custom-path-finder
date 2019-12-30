@@ -1,11 +1,12 @@
 class Grid extends Arr2 {
-  tileSize = 30;
+  tileSize = 15;
   halfTileSize = this.tileSize / 2;
 
   colors = {
     1: "black",
     2: "green",
-    3: "grey"
+    3: "grey",
+    4: "red"
   };
 
   neighborPositions = [
@@ -13,11 +14,15 @@ class Grid extends Arr2 {
     new Vec2(1, 0),
     new Vec2(0, 1),
     new Vec2(-1, 0),
+
+    // Those are for diagonal movement
     new Vec2(-1, -1),
     new Vec2(1, 1),
     new Vec2(-1, 1),
     new Vec2(1, -1)
   ];
+
+  failedPaths = [];
 
   draw() {
     this.map((value, pos) => {
@@ -48,7 +53,7 @@ class Grid extends Arr2 {
 
       if (
         this.arr[neighbor.x] !== undefined &&
-        this.arr[neighbor.x][neighbor.y] !== 3
+        this.arr[neighbor.x][neighbor.y] < 3
       ) {
         neighbors.push(neighbor);
       }
@@ -74,16 +79,18 @@ class Grid extends Arr2 {
     ctx.stroke();
   }
 
-  pathContains(path, pos) {
+  pathIndexOf(path, pos) {
     for (let i = path.length - 1; i >= 0; i--) {
-      if (path[i].equals(pos)) return true;
+      if (path[i].equals(pos)) return i;
     }
 
-    return false;
+    return -1;
   }
 
   path(a, b) {
     const steps = [a];
+    this.map((val, pos) => (val === 4 ? this.set(pos, 0) : null));
+    this.failedPaths = [];
 
     const step = () => {
       const previous = steps[steps.length - 1];
@@ -98,12 +105,22 @@ class Grid extends Arr2 {
 
       neighbors = neighbors.sort((i, j) => i.dist - j.dist);
 
-      while (this.pathContains(steps, neighbors[0].pos)) {
-        neighbors.shift();
-        if (neighbors.length === 0) {
+      if (!neighbors.length) {
+        if (!steps.length) {
           console.log("dead end!");
           return;
         }
+
+        steps.shift();
+        return;
+      }
+
+      const intersectionIndex = this.pathIndexOf(steps, neighbors[0].pos);
+
+      if (intersectionIndex >= 0) {
+        const failedPath = steps.splice(intersectionIndex + 1, steps.length);
+        failedPath.map(pos => this.set(pos, 4));
+        this.failedPaths.push(failedPath);
       }
 
       steps.push(neighbors[0].pos);
