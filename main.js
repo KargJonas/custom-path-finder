@@ -1,6 +1,6 @@
 const grid = new Grid(40, 40);
 let start = new Vec2(0, 0);
-let end = new Vec2(19, 19);
+let end = new Vec2(39, 39);
 let lastCursorPos = new Vec2();
 let addWalls = true; // false => remove walls
 grid.set(start, 1);
