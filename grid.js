@@ -13,13 +13,13 @@ class Grid extends Arr2 {
     new Vec2(0, -1),
     new Vec2(1, 0),
     new Vec2(0, 1),
-    new Vec2(-1, 0)
+    new Vec2(-1, 0),
 
     // // Those are for diagonal movement
-    // new Vec2(-1, -1),
-    // new Vec2(1, 1),
-    // new Vec2(-1, 1),
-    // new Vec2(1, -1)
+    new Vec2(-1, -1),
+    new Vec2(1, 1),
+    new Vec2(-1, 1),
+    new Vec2(1, -1)
 
     // // Just for fun - jump across walls
     // new Vec2(0, -2),
